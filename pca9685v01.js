@@ -1,3 +1,5 @@
+//Initial Porting by FyberChris: http://forum.espruino.com/profiles/1310/
+
 //Sources:
 //https://github.com/technicalmachine/servo-pca9685
 //https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library
