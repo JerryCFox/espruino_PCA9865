@@ -48,13 +48,13 @@ exports.connect = function(_i2c,freq) {
 function PCA9685(i2c, freq, address) {
   this.i2c = i2c;
   freq = 50;
+  this.add = 0x40;
   this.setPWMFreq(freq);
-  this.a = 0x40;
-  this.resetPCA9685();
+  //this.resetPCA9685();
 }
 
 PCA9685.prototype.resetPCA9685 = function() {
-  this.i2c.writeTo(this.a, [C.PCA9685_MODE1, 0x0]);
+  this.i2c.writeTo(this.add, [C.PCA9685_MODE1, 0x0]);
 };
 PCA9685.prototype.setPWMFreq = function(freq) {
   var prescaleval = (25000000/C.MAX)/freq - 1;
@@ -62,20 +62,20 @@ PCA9685.prototype.setPWMFreq = function(freq) {
   
   var oldmode = this.i2c.readFrom(this.a, C.PCA9685_MODE1) | 0x10;
   var newmode = (oldmode & 0x7F) | 0x10; // sleep
-  this.i2c.writeTo(this.a, [C.PCA9685_MODE1, newmode]); // go to sleep
-  this.i2c.writeTo(this.a, [C.PCA9685_PRESCALE, prescale]); // set the prescaler
-  this.i2c.writeTo(this.a, [C.PCA9685_MODE1, oldmode]);
-  setTimeout(this.i2c.writeTo(this.a, [C.PCA9685_MODE1, oldmode | 0x80]),1);
+  this.i2c.writeTo(this.add, [C.PCA9685_MODE1, newmode]); // go to sleep
+  this.i2c.writeTo(this.add, [C.PCA9685_PRESCALE, prescale]); // set the prescaler
+  this.i2c.writeTo(this.add, [C.PCA9685_MODE1, oldmode]);
+  setTimeout(this.i2c.writeTo(this.add, [C.PCA9685_MODE1, oldmode | 0x80]),1);
 };
 
 PCA9685.prototype.setPWM = function(num, on, off) {
   if (num < 1 || num > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
-  this.i2c.writeTo(this.a, [C.LED0_ON_L + (num-1)*4, on]);
-  this.i2c.writeTo(this.a, [C.LED0_ON_H + (num-1)*4, on >> 8]);
-  this.i2c.writeTo(this.a, [C.LED0_OFF_L + (num-1)*4, off]);
-  this.i2c.writeTo(this.a, [C.LED0_OFF_H + (num-1)*4, off >> 8]);
+  this.i2c.writeTo(this.add, [C.LED0_ON_L + (num-1)*4, on]);
+  this.i2c.writeTo(this.add, [C.LED0_ON_H + (num-1)*4, on >> 8]);
+  this.i2c.writeTo(this.add, [C.LED0_OFF_L + (num-1)*4, off]);
+  this.i2c.writeTo(this.add, [C.LED0_OFF_H + (num-1)*4, off >> 8]);
 };
 // 0...180
 PCA9685.prototype.moveServo = function (num, val) {
