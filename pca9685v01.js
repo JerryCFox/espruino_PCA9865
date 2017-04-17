@@ -6,7 +6,7 @@
 //TODO:
 //Add additional modes and functions, ie.
 //such as from https://github.com/arc12/PCA9685/
-var C = {
+var Constants = {
     PCA9685_SUBADR1 : 0x02,
     PCA9685_SUBADR2 : 0x03,
     PCA9685_SUBADR3 : 0x04,
@@ -54,35 +54,35 @@ function PCA9685(i2c, freq, address) {
 }
 
 PCA9685.prototype.resetPCA9685 = function() {
-  this.i2c.writeTo(this.add, [C.PCA9685_MODE1, 0x0]);
+  this.i2c.writeTo(this.add, [Constants.PCA9685_MODE1, 0x0]);
 };
 PCA9685.prototype.setPWMFreq = function(freq) {
-  var prescaleval = (25000000/C.MAX)/freq - 1;
+  var prescaleval = (25000000/Constants.MAX)/freq - 1;
   var prescale = Math.floor(prescaleval);
   
-  var oldmode = this.i2c.readFrom(this.add, C.PCA9685_MODE1) | 0x10;
+  var oldmode = this.i2c.readFrom(this.add, Constants.PCA9685_MODE1) | 0x10;
   var newmode = (oldmode & 0x7F) | 0x10; // sleep
-  this.i2c.writeTo(this.add, [C.PCA9685_MODE1, newmode]); // go to sleep
-  this.i2c.writeTo(this.add, [C.PCA9685_PRESCALE, prescale]); // set the prescaler
-  this.i2c.writeTo(this.add, [C.PCA9685_MODE1, oldmode]);
-  setTimeout(this.i2c.writeTo(this.add, [C.PCA9685_MODE1, oldmode | 0x80]),1);
+  this.i2c.writeTo(this.add, [Constants.PCA9685_MODE1, newmode]); // go to sleep
+  this.i2c.writeTo(this.add, [Constants.PCA9685_PRESCALE, prescale]); // set the prescaler
+  this.i2c.writeTo(this.add, [Constants.PCA9685_MODE1, oldmode]);
+  setTimeout(this.i2c.writeTo(this.add, [Constants.PCA9685_MODE1, oldmode | 0x80]),1);
 };
 
 PCA9685.prototype.setPWM = function(num, on, off) {
   if (num < 1 || num > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
-  this.i2c.writeTo(this.add, [C.LED0_ON_L + (num-1)*4, on]);
-  this.i2c.writeTo(this.add, [C.LED0_ON_H + (num-1)*4, on >> 8]);
-  this.i2c.writeTo(this.add, [C.LED0_OFF_L + (num-1)*4, off]);
-  this.i2c.writeTo(this.add, [C.LED0_OFF_H + (num-1)*4, off >> 8]);
+  this.i2c.writeTo(this.add, [Constants.LED0_ON_L + (num-1)*4, on]);
+  this.i2c.writeTo(this.add, [Constants.LED0_ON_H + (num-1)*4, on >> 8]);
+  this.i2c.writeTo(this.add, [Constants.LED0_OFF_L + (num-1)*4, off]);
+  this.i2c.writeTo(this.add, [Constants.LED0_OFF_H + (num-1)*4, off >> 8]);
 };
 // 0...180
 PCA9685.prototype.moveServo = function (num, val) {
   if (num < 1 || num > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
-  this.setPWM(num, ((val/180) * (this.high - this.low)) + this.low, Math.floor(C.MAX/100*on));
+  this.setPWM(num, ((val/180) * (this.high - this.low)) + this.low, Math.floor(Constants.MAX/100*on));
 };
 //I2C1.setup({scl:B8, sda:B9});
 //var driver = connect(I2C1, 50);
