@@ -65,7 +65,7 @@ PCA9685.prototype.setPWMFreq = function(freq) {
   this.i2c.writeTo(this.add, [Constants.PCA9685_MODE1, newmode]); // go to sleep
   this.i2c.writeTo(this.add, [Constants.PCA9685_PRESCALE, prescale]); // set the prescaler
   this.i2c.writeTo(this.add, [Constants.PCA9685_MODE1, oldmode]);
-  setTimeout(this.i2c.writeTo(this.add, [Constants.PCA9685_MODE1, oldmode | 0x80]),1);
+  this.i2c.writeTo(this.add, [Constants.PCA9685_MODE1, 0x0]);
 };
 
 PCA9685.prototype.setPWM = function(num, on, off) {
