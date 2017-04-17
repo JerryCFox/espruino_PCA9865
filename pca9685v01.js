@@ -40,16 +40,19 @@ var C = {
     ALLLED_OFF_L : 0xFC,
     ALLLED_OFF_H : 0xFD
 };
+
 exports.connect = function(_i2c,freq) {
     return new PCA9685(_i2c,freq);
 };
+
 function PCA9685(i2c, freq, address) {
   this.i2c = i2c;
-  freq = typeof freq != 'undefined' ? freq : 50;
+  freq = 50;
   this.setPWMFreq(freq);
-  this.a = typeof address !== 'undefined' ? address : 0x40;
+  this.a = 0x40;
   this.resetPCA9685();
 }
+
 PCA9685.prototype.resetPCA9685 = function() {
   this.i2c.writeTo(this.a, [C.PCA9685_MODE1, 0x0]);
 };
@@ -64,6 +67,7 @@ PCA9685.prototype.setPWMFreq = function(freq) {
   this.i2c.writeTo(this.a, [C.PCA9685_MODE1, oldmode]);
   setTimeout(this.i2c.writeTo(this.a, [C.PCA9685_MODE1, oldmode | 0x80]),1);
 };
+
 PCA9685.prototype.setPWM = function(num, on, off) {
   if (num < 1 || num > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
