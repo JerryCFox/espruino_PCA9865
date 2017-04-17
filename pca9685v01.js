@@ -60,7 +60,7 @@ PCA9685.prototype.setPWMFreq = function(freq) {
   var prescaleval = (25000000/C.MAX)/freq - 1;
   var prescale = Math.floor(prescaleval);
   
-  var oldmode = this.i2c.readFrom(this.a, C.PCA9685_MODE1) | 0x10;
+  var oldmode = this.i2c.readFrom(this.add, C.PCA9685_MODE1) | 0x10;
   var newmode = (oldmode & 0x7F) | 0x10; // sleep
   this.i2c.writeTo(this.add, [C.PCA9685_MODE1, newmode]); // go to sleep
   this.i2c.writeTo(this.add, [C.PCA9685_PRESCALE, prescale]); // set the prescaler
