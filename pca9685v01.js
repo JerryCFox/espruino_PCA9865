@@ -82,8 +82,8 @@ PCA9685.prototype.moveServo = function (num, val) {
   if (num < 1 || num > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
-  console.log(Math.floor(Constants.MAX-(Constants.MAX)*(val/180)),0);
-  this.setPWM(num,Math.floor(Constants.MAX-(Constants.MAX)*(val/180)),0);
+  console.log(Math.floor(Constants.MAX-(Constants.MAX)*(val/180)),Constants.MAX);
+  this.setPWM(num,Math.floor(Constants.MAX-(Constants.MAX)*(val/180)),Constants.MAX);
 };
 //I2C1.setup({scl:B8, sda:B9});
 //var driver = connect(I2C1, 50);
