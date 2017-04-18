@@ -78,7 +78,7 @@ PCA9685.prototype.setPWM = function(num, on, off) {
   this.i2c.writeTo(this.add, [Constants.LED0_OFF_H + (num-1)*4, off >> 8]);
 };
 // 0...180
-PCA9685.prototype.moveServo = function (num, val) {
+PCA9685.prototype.move = function (num, val) {
   if (num < 1 || num > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
